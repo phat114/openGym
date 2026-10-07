@@ -1,0 +1,114 @@
+# Build on GitHub's Mac, then sign/install on a personal iPhone with AltStore.
+# No Apple account, signing certificate or provisioning profile is used in CI.
+name: Build iOS for AltStore
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-sideload-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: macos-15
+    timeout-minutes: 40
+    defaults:
+      run:
+        shell: bash
+        working-directory: frontend
+    env:
+      DEVELOPER_DIR: /Applications/Xcode_16.4.app/Contents/Developer
+      DATASET: https://cdn.jsdelivr.net/gh/hasaneyldrm/exercises-dataset@7455efae41b330c265e7cd4b78dfa848e7ce5ebd
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Check build tools
+        run: |
+          xcodebuild -version
+          pod --version
+
+      - name: Install dependencies
+        # App icons are already committed; skip the asset generator's native install hooks.
+        run: npm ci --ignore-scripts
+
+      - name: Build the standalone mobile app
+        run: npm run build
+        env:
+          VITE_MOBILE: '1'
+          VITE_IMG_BASE: ${{ env.DATASET }}/images/
+          VITE_GIF_BASE: ${{ env.DATASET }}/videos/
+
+      - name: Copy assets and install iOS plugins
+        run: npx cap sync ios
+
+      - name: Archive without signing
+        run: |
+          set -euo pipefail
+          APP_VERSION="$(node -p "require('./package.json').version")"
+          mkdir -p "$RUNNER_TEMP/opengym-ios"
+          xcodebuild \
+            -workspace ios/App/App.xcworkspace \
+            -scheme App \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/opengym-ios/App.xcarchive" \
+            MARKETING_VERSION="$APP_VERSION" \
+            CURRENT_PROJECT_VERSION="$GITHUB_RUN_NUMBER" \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            ENABLE_USER_SCRIPT_SANDBOXING=NO \
+            archive 2>&1 | tee "$RUNNER_TEMP/opengym-ios/xcodebuild.log"
+
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          APP_VERSION="$(node -p "require('./package.json').version")"
+          APP_PATH="$RUNNER_TEMP/opengym-ios/App.xcarchive/Products/Applications/App.app"
+          test -f "$APP_PATH/Info.plist"
+          test -f "$APP_PATH/App"
+          test -f "$APP_PATH/public/index.html"
+          mkdir -p "$RUNNER_TEMP/opengym-ios/package/Payload" "$RUNNER_TEMP/opengym-ios/artifacts"
+          ditto "$APP_PATH" "$RUNNER_TEMP/opengym-ios/package/Payload/App.app"
+          cd "$RUNNER_TEMP/opengym-ios/package"
+          zip -qry "$RUNNER_TEMP/opengym-ios/artifacts/openGym-$APP_VERSION-unsigned.ipa" Payload
+          cd "$RUNNER_TEMP/opengym-ios/artifacts"
+          shasum -a 256 "openGym-$APP_VERSION-unsigned.ipa" > "openGym-$APP_VERSION-unsigned.ipa.sha256"
+          {
+            echo '### iPhone build for AltStore'
+            echo ''
+            echo "Download the openGym-ios-unsigned-$GITHUB_RUN_NUMBER artifact below and extract the ZIP."
+            echo 'Install the unsigned .ipa with AltStore on your iPhone; opening it in Safari does not install it.'
+            echo 'This build needs no paid Apple Developer membership. Free signing must be refreshed within 7 days.'
+            echo 'See docs/IOS_WINDOWS.md for Windows setup and installation.'
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Upload IPA and checksum
+        uses: actions/upload-artifact@v7
+        with:
+          name: openGym-ios-unsigned-${{ github.run_number }}
+          path: ${{ runner.temp }}/opengym-ios/artifacts/*
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Upload native build diagnostics
+        if: ${{ always() }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: openGym-ios-build-logs-${{ github.run_number }}
+          path: |
+            ${{ runner.temp }}/opengym-ios/xcodebuild.log
+            frontend/ios/App/Podfile.lock
+          if-no-files-found: ignore
+          retention-days: 7

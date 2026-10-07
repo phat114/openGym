@@ -7,6 +7,14 @@ const COPY = {
     dayRoutineSuffix: 'today',
     dayBody: "It's on your plan — let's go 💪",
   },
+  vi: {
+    restTitle: 'Hết giờ nghỉ 💪',
+    restBody: 'Đến hiệp tiếp theo rồi.',
+    testBody: 'Thông báo thử ✅ — đây là cách thông báo hiển thị.',
+    dayFallbackTitle: 'Hôm nay có buổi tập',
+    dayRoutineSuffix: 'hôm nay',
+    dayBody: 'Đã có trong lịch tập — cùng tập nào 💪',
+  },
   'pt-BR': {
     restTitle: 'Descanso terminado 💪',
     restBody: 'Hora da próxima série.',

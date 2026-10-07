@@ -221,14 +221,17 @@ apksigner sign --ks my.keystore --ks-key-alias opengym --out openGym.apk aligned
 
 ### iPhone — what's actually possible
 
-Apple does not allow installing apps outside the App Store, so there is no `.ipa` download
-that would simply install. Your free options:
+A downloaded unsigned `.ipa` needs signing before it can run on your iPhone. Your options
+without a paid Apple Developer membership:
 
 - **Self-host + PWA** (recommended): open your instance in Safari → Share → *Add to Home
   Screen*. Full-screen app, no expiry, plus sync and passkeys.
 - **Xcode free signing:** open `ios/` in Xcode with a free Apple ID as the team and run it
   onto your own iPhone. Apple expires the signature after 7 days; re-run from Xcode to renew.
-- **AltStore:** automates that 7-day re-signing over Wi-Fi via a Mac companion app.
+- **Windows + GitHub Actions + AltStore:** build an unsigned IPA on GitHub's macOS runner,
+  then sign and install it with your Apple ID using AltServer on Windows. No personal Mac
+  is needed. See the [Windows installation guide (Vietnamese)](IOS_WINDOWS.md).
+- **AltStore:** automates that 7-day re-signing over Wi-Fi via a Windows or Mac companion app.
 
 There is a `build:ios` job in [`.gitlab-ci.yml`](../.gitlab-ci.yml) for exactly that path: the
 same mobile bundle, `xcodebuild archive` without a signing identity, and an *unsigned* `.ipa`

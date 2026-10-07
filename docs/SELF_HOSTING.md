@@ -156,7 +156,7 @@ is gated by your passkey and enforced server-side, so it needs no separate login
 An instance whose people share a language can start everyone in it:
 
 ```bash
-DEFAULT_LANG=pt-BR         # any code from Settings → Language: de, es, fr, pt-BR, …
+DEFAULT_LANG=pt-BR         # any code from Settings → Language: de, es, fr, pt-BR, vi, …
 ```
 
 The sign-in and create-profile screens open in that language, and so does every profile that
