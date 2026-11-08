@@ -40,4 +40,4 @@ jobs:
         run: |
           curl -s -X POST https://api.telegram.org/bot${{ secrets.TELEGRAM_TOKEN }}/sendMessage \
             -d chat_id=${{ secrets.TELEGRAM_CHAT_ID }} \
-            -d text="❌ Lỗi rồi! Quá trình deploy PhatGym thất bại. Vui lòng vào GitHub kiểm tra lại Log."
+            -d text="❌ Lỗi rồi! Quá trình deploy PhatGym thất bại. Vui lòng vào GitHub kiểm tra lại Log. "
