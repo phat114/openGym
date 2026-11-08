@@ -14,7 +14,14 @@ jobs:
     steps:
       - name: 📥 Kéo code mới nhất từ GitHub
         uses: actions/checkout@v4
-
+      - name: 🚀 Build và Khởi động lại PhatGym
+        run: |
+          # Tự động tạo file .env từ Secret
+          echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
+          
+          # Dừng container cũ và build lại cái mới
+          docker compose down
+          docker compose up -d --build
       - name: 🚀 Build và Khởi động lại PhatGym
         run: |
           # --- PHẦN NÀY TÙY THUỘC VÀO CÁCH BẠN CHẠY DOCKER ---
