@@ -19,8 +19,8 @@ jobs:
         run: |
           # --- PHẦN NÀY TÙY THUỘC VÀO CÁCH BẠN CHẠY DOCKER ---
           # Ví dụ nếu bạn dùng docker-compose:
-          docker-compose down
-          docker-compose up -d --build
+          docker compose down
+          docker compose up -d --build
           
           # Hoặc nếu bạn dùng lệnh docker thuần:
           # docker build -t opengym_app .
