@@ -1,0 +1,22 @@
+# Bản override cho server chạy fork tiếng Việt. Chép ra cạnh docker-compose.yml:
+#
+#     cp docs/deploy/docker-compose.override.yml .
+#
+# Compose tự đọc file tên docker-compose.override.yml nằm cạnh docker-compose.yml, không cần -f.
+#
+# Vì sao cần: docker-compose.yml đặt image là ghcr.io/duartesantos8/opengym-{api,web}:latest —
+# image của upstream, KHÔNG có tiếng Việt. Khi cả `image:` lẫn `build:` cùng có, compose kéo image
+# đó về trước rồi mới tính chuyện build, và `docker compose pull` sẽ ghi đè bản bạn đã build.
+#
+#   - Đổi sang tên chỉ có trên máy này, nên không registry nào trả về được bản upstream.
+#   - pull_policy: build bắt compose build từ mã nguồn đang checkout mỗi lần `up`
+#     (dùng cache của Docker, nên nhanh khi mã nguồn không đổi).
+#
+# Kiểm tra: docker compose config | grep -E 'image:|pull_policy'
+services:
+  api:
+    image: opengym-api:local
+    pull_policy: build
+  web:
+    image: opengym-web:local
+    pull_policy: build

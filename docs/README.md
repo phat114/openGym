@@ -21,6 +21,7 @@ to install.
 | Guide | Read it when |
 |---|---|
 | [Self-hosting](SELF_HOSTING.md) | You're setting up an instance. Start here: running it, passkeys and HTTPS, users, backups, updates, troubleshooting |
+| [Deploy to a server (Tiếng Việt)](deploy/README.md) | Step-by-step VPS runbook for this fork: build from source, Caddy or Cloudflare Tunnel, nightly backups, updates |
 | [HTTPS at home](SELF_HOSTING_HTTPS.md) | You want valid certificates on your LAN without exposing the server to the internet |
 | [Kubernetes](SELF_HOSTING_KUBERNETES.md) | You run a cluster instead of Docker Compose |
 | [AI coach](AI_COACH.md) | You're deciding whether to turn the coach on, and with which provider |
