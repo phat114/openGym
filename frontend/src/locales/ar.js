@@ -1200,6 +1200,8 @@ export default {
   'Push, pull and legs each get their own day.': 'لكل من الدفع والسحب والأرجل يوم خاص.',
   'Upper / Lower': 'علوي / سفلي',
   'Upper body twice, lower body twice.': 'الجزء العلوي مرتين، والجزء السفلي مرتين.',
+  'PPL + Upper / Lower': 'PPL + علوي / سفلي',
+  'Push, pull and legs, then upper and lower body once more.': 'دفع وسحب وأرجل، ثم الجزء العلوي والسفلي مرة أخرى.',
   'Full Body': 'الجسم كامل',
   'Three sessions, the whole body each time.': 'ثلاث جلسات، الجسم كامل في كل مرة.',
   '5×5': '5×5',

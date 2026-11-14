@@ -232,6 +232,8 @@ export default {
   'Push, pull and legs each get their own day.': '推、拉、腿各占一天。',
   'Upper / Lower': '上肢 / 下肢',
   'Upper body twice, lower body twice.': '上肢两次，下肢两次。',
+  'PPL + Upper / Lower': 'PPL + 上肢 / 下肢',
+  'Push, pull and legs, then upper and lower body once more.': '推、拉、腿各一天，再练一次上肢和下肢。',
   'Full Body': '全身',
   'Three sessions, the whole body each time.': '三次训练，每次练全身。',
   '5×5': '5×5',

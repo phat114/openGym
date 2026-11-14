@@ -82,6 +82,8 @@ export const PT_BR_OVERRIDES = {
   'Choose starter plan': 'Escolha um plano inicial',
   'The new plan will be scheduled on {0}. Existing routines are kept — only those days of the weekly plan change.': 'O novo plano fica em {0}. Suas rotinas são todas mantidas — só esses dias do plano semanal mudam.',
   'Push / Pull / Legs': 'Push / Pull / Legs',
+  'PPL + Upper / Lower': 'PPL + Superior / Inferior',
+  'Push, pull and legs, then upper and lower body once more.': 'Empurrar, puxar e pernas, depois mais uma vez parte superior e inferior.',
   'Build my own plan': 'Criar meu próprio plano',
   'Finish your first workout to see progress curves here.': 'Finalize seu primeiro treino para ver os gráficos de progresso aqui.',
   'Your weekly routine': 'Sua rotina semanal',

@@ -2,9 +2,15 @@
 // written as string literals inside t() calls in sheets.jsx, because check-source-strings.mjs
 // only finds them there — copy parked in here would silently ship English in every language.
 //
-// A routine is [key, name, emoji, [[exerciseId, sets, reps], …]]. The key is what a plan's
-// schedule points at, so a weekday never depends on the position of a routine in the array.
-// Names stay canonical English — they become ordinary user routines, which are not translated.
+// A routine is [key, name, emoji, [exercise, …], opts?]. The key is what a plan's schedule
+// points at, so a weekday never depends on the position of a routine in the array. Names stay
+// canonical English — they become ordinary user routines, which are not translated.
+//
+// An exercise is [exerciseId, sets, reps, restSec?, extra?]. `reps` is a count, or a [low, high]
+// range for double progression — persisted as repsMin / reps, the shape normalizeRepRange reads.
+// `restSec` is the exercise's own rest; absent, the global rest timer applies. `extra` is copied
+// onto the exercise as is ({ side: true } for unilateral work, whose reps count both sides).
+// `opts` is copied onto the routine ({ prog } sets the rule for every exercise in it).
 import { uid } from './format.js'
 
 const PPL = [
@@ -32,17 +38,75 @@ const FIVE_BY_FIVE = [
   ['5x5-c', '5×5 C', 'barbell', [['0739', 5, 5], ['0047', 5, 5], ['1323', 5, 5]]]
 ]
 
+// PPL + Upper/Lower, five days, hypertrophy with chest and back first. The source sheet works in
+// rep ranges and adds load once every set reaches the top of its range — double progression, so
+// the routines carry it. Its rest windows ("90–120 s") keep their low end, a multiple of the
+// config sheet's 15 s step; RIR targets and coaching notes have no field to live in and stay out.
+const DOUBLE = { prog: 'double' }
+const PPL_UL = [
+  ['ppl-ul-push', 'Push', 'barbell', [
+    ['0314', 3, [6, 10], 120], // incline dumbbell press
+    ['0577', 3, [8, 12], 90], // machine chest press
+    ['0227', 2, [12, 15], 60], // cable fly
+    ['0405', 2, [8, 12], 90], // seated shoulder press
+    ['0334', 3, [12, 20], 60], // dumbbell lateral raise
+    ['0200', 2, [10, 15], 60], // rope triceps pushdown
+    ['0194', 2, [10, 15], 60] // overhead cable triceps extension
+  ], DOUBLE],
+  ['ppl-ul-pull', 'Pull', 'pullup', [
+    ['2330', 3, [8, 12], 90], // lat pulldown
+    ['0327', 3, [8, 12], 90], // chest-supported row
+    ['0214', 2, [20, 24], 60, { side: true }], // single-arm cable row, 10–12 per side
+    ['0602', 3, [12, 20], 60], // reverse pec deck
+    ['0294', 2, [8, 12], 60], // dumbbell curl
+    ['0313', 2, [10, 15], 60] // hammer curl
+  ], DOUBLE],
+  ['ppl-ul-legs', 'Legs', 'legs', [
+    ['0743', 3, [8, 12], 120], // hack squat
+    ['0085', 3, [8, 10], 120], // romanian deadlift
+    ['0739', 2, [10, 15], 90], // leg press
+    ['0599', 2, [10, 15], 60], // seated leg curl
+    ['0585', 2, [12, 15], 60], // leg extension
+    ['0605', 4, [10, 15], 60], // standing calf raise
+    ['0175', 3, [10, 15], 60] // cable crunch
+  ], DOUBLE],
+  ['ppl-ul-upper', 'Upper', 'barbell', [
+    ['0577', 3, [8, 12], 90], // machine chest press
+    ['2616', 3, [8, 12], 90], // lat pulldown, a different (v-bar) grip from Pull day
+    ['0171', 2, [12, 15], 60], // incline cable fly
+    ['0861', 3, [8, 12], 90], // seated cable row
+    ['0334', 3, [12, 20], 60], // dumbbell lateral raise
+    ['0225', 2, [12, 20], 60], // rear delt cable fly
+    ['0447', 3, [10, 15], 60], // ez-bar curl
+    ['0241', 3, [10, 15], 60] // cable triceps pushdown
+  ], DOUBLE],
+  ['ppl-ul-lower', 'Lower', 'legs', [
+    ['0743', 3, [8, 12], 120], // hack squat
+    ['1459', 2, [10, 12], 90], // dumbbell romanian deadlift
+    ['0586', 2, [10, 15], 60], // lying leg curl — Legs day has the seated one
+    ['0585', 2, [12, 15], 60], // leg extension
+    ['3562', 2, [8, 12], 90], // hip thrust (upper back on the bench)
+    ['0594', 3, [10, 15], 60] // seated calf raise — Legs day has the standing one
+  ], DOUBLE]
+]
+
 // [weekday, routineKey] — weekday is a DAYN index, so 1 is Monday. Fixed weeks only: every
 // plan repeats the same seven days, which is all the weekly plan model can represent.
 const PLANS = {
   ppl: { routines: PPL, schedule: [[1, 'push'], [3, 'pull'], [5, 'legs']] },
   'upper-lower': { routines: UPPER_LOWER, schedule: [[1, 'upper-a'], [2, 'lower-a'], [4, 'upper-b'], [5, 'lower-b']] },
   'full-body': { routines: FULL_BODY, schedule: [[1, 'fb-a'], [3, 'fb-b'], [5, 'fb-c']] },
-  '5x5': { routines: FIVE_BY_FIVE, schedule: [[1, '5x5-a'], [3, '5x5-b'], [5, '5x5-c']] }
+  '5x5': { routines: FIVE_BY_FIVE, schedule: [[1, '5x5-a'], [3, '5x5-b'], [5, '5x5-c']] },
+  'ppl-upper-lower': { routines: PPL_UL, schedule: [[1, 'ppl-ul-push'], [2, 'ppl-ul-pull'], [3, 'ppl-ul-legs'], [5, 'ppl-ul-upper'], [6, 'ppl-ul-lower']] }
+}
+
+const exercise = ([id, sets, reps, restSec, extra]) => {
+  const [repsMin, top] = Array.isArray(reps) ? reps : [0, reps]
+  return { id, sets, reps: top, ...(repsMin ? { repsMin } : {}), weight: 0, ...(restSec ? { restSec } : {}), ...extra }
 }
 
 const build = routines =>
-  routines.map(([, name, emoji, list]) => ({ id: uid(), name, emoji, ex: list.map(([id, sets, reps]) => ({ id, sets, reps, weight: 0 })) }))
+  routines.map(([, name, emoji, list, opts]) => ({ id: uid(), name, emoji, ...opts, ex: list.map(exercise) }))
 
 // Fresh routine objects (new ids) — [push, pull, legs]. The demo build seeds a history on
 // top of exactly these three, so this entry point keeps its shape.

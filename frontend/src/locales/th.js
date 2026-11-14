@@ -232,6 +232,8 @@ export default {
   'Push, pull and legs each get their own day.': 'ดัน ดึง และขา แยกกันคนละวัน',
   'Upper / Lower': 'บน / ล่าง',
   'Upper body twice, lower body twice.': 'ลำตัวบนสองครั้ง ลำตัวล่างสองครั้ง',
+  'PPL + Upper / Lower': 'PPL + บน / ล่าง',
+  'Push, pull and legs, then upper and lower body once more.': 'ดัน ดึง และขา แล้วตามด้วยลำตัวบนและล่างอีกรอบ',
   'Full Body': 'เต็มตัว',
   'Three sessions, the whole body each time.': 'สามครั้ง ครบทั้งตัวทุกครั้ง',
   '5×5': '5×5',

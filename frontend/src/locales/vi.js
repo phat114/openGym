@@ -1200,6 +1200,8 @@ export default {
   "Push, pull and legs each get their own day.": "Mỗi nhóm bài đẩy, kéo và chân có một ngày tập riêng.",
   "Upper / Lower": "Thân trên / Thân dưới",
   "Upper body twice, lower body twice.": "Hai buổi thân trên, hai buổi thân dưới.",
+  "PPL + Upper / Lower": "PPL + Thân trên / Thân dưới",
+  "Push, pull and legs, then upper and lower body once more.": "Đẩy, kéo, chân rồi thêm một buổi thân trên, một buổi thân dưới.",
   "Full Body": "Toàn thân",
   "Three sessions, the whole body each time.": "Ba buổi tập, mỗi buổi tập toàn thân.",
   "5×5": "5×5",

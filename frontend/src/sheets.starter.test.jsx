@@ -53,8 +53,19 @@ describe('starter plan chooser', () => {
     starterPlanSheet()
     const host = renderTop()
     expect([...host.querySelectorAll('.item .tt')].map(el => el.textContent))
-      .toEqual(['Push / Pull / Legs', 'Upper / Lower', 'Full Body', '5×5'])
+      .toEqual(['Push / Pull / Legs', 'Upper / Lower', 'Full Body', '5×5', 'PPL + Upper / Lower'])
     expect(rowFor(host, 'Upper / Lower').querySelector('.ss').textContent).toContain('4 days per week')
+    expect(rowFor(host, 'PPL + Upper / Lower').querySelector('.ss').textContent).toContain('5 days per week')
+  })
+
+  it('loads the five-day PPL + Upper/Lower onto Monday–Wednesday, Friday and Saturday', () => {
+    choose('PPL + Upper / Lower')
+
+    expect(useUI.getState().sheets).toHaveLength(0)
+    expect([1, 2, 3, 5, 6].map(nameOn)).toEqual(['Push', 'Pull', 'Legs', 'Upper', 'Lower'])
+    expect(S().week[4] ?? []).toEqual([])            // Thursday and Sunday stay rest days
+    expect(S().week[0] ?? []).toEqual([])
+    expect(useUI.getState().toastMsg).toBe('PPL + Upper / Lower loaded')
   })
 
   it('loads straight away when the plan’s weekdays are free, without asking', () => {

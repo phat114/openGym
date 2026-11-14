@@ -232,6 +232,8 @@ export default {
   'Push, pull and legs each get their own day.': 'İtiş, çekiş ve bacak; her biri kendi gününde.',
   'Upper / Lower': 'Üst / Alt',
   'Upper body twice, lower body twice.': 'Üst vücut iki kez, alt vücut iki kez.',
+  'PPL + Upper / Lower': 'PPL + Üst / Alt',
+  'Push, pull and legs, then upper and lower body once more.': 'İtiş, çekiş ve bacak; ardından bir kez daha üst ve alt vücut.',
   'Full Body': 'Tüm vücut',
   'Three sessions, the whole body each time.': 'Üç antrenman, her seferinde tüm vücut.',
   '5×5': '5×5',

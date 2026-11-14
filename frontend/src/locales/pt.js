@@ -232,6 +232,8 @@ export default {
   'Push, pull and legs each get their own day.': 'Empurrar, puxar e pernas, cada um no seu dia.',
   'Upper / Lower': 'Superior / Inferior',
   'Upper body twice, lower body twice.': 'Tronco superior duas vezes, inferior duas vezes.',
+  'PPL + Upper / Lower': 'PPL + Superior / Inferior',
+  'Push, pull and legs, then upper and lower body once more.': 'Empurrar, puxar e pernas, depois mais uma vez tronco superior e inferior.',
   'Full Body': 'Corpo inteiro',
   'Three sessions, the whole body each time.': 'Três sessões, o corpo todo de cada vez.',
   '5×5': '5×5',

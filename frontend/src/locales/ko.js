@@ -232,6 +232,8 @@ export default {
   'Push, pull and legs each get their own day.': '푸시, 풀, 레그를 각각 다른 날에.',
   'Upper / Lower': '상체 / 하체',
   'Upper body twice, lower body twice.': '상체 두 번, 하체 두 번.',
+  'PPL + Upper / Lower': 'PPL + 상체 / 하체',
+  'Push, pull and legs, then upper and lower body once more.': '푸시, 풀, 레그 다음 상체와 하체를 한 번 더.',
   'Full Body': '전신',
   'Three sessions, the whole body each time.': '세 번의 세션, 매번 전신.',
   '5×5': '5×5',

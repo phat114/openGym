@@ -232,6 +232,8 @@ export default {
   'Push, pull and legs each get their own day.': 'Tolás, húzás és láb, mind a maga napján.',
   'Upper / Lower': 'Felső / Alsó',
   'Upper body twice, lower body twice.': 'Felsőtest kétszer, alsótest kétszer.',
+  'PPL + Upper / Lower': 'PPL + Felső / Alsó',
+  'Push, pull and legs, then upper and lower body once more.': 'Tolás, húzás és láb, utána még egyszer felső- és alsótest.',
   'Full Body': 'Teljes test',
   'Three sessions, the whole body each time.': 'Három edzés, mindegyiken az egész test.',
   '5×5': '5×5',

@@ -232,6 +232,8 @@ export default {
   'Push, pull and legs each get their own day.': 'पुश, पुल और लेग्स, हर एक का अपना दिन।',
   'Upper / Lower': 'ऊपरी / निचला',
   'Upper body twice, lower body twice.': 'ऊपरी शरीर दो बार, निचला शरीर दो बार।',
+  'PPL + Upper / Lower': 'PPL + ऊपरी / निचला',
+  'Push, pull and legs, then upper and lower body once more.': 'पुश, पुल और लेग्स, फिर ऊपरी और निचला शरीर एक बार और।',
   'Full Body': 'फ़ुल बॉडी',
   'Three sessions, the whole body each time.': 'तीन सेशन, हर बार पूरा शरीर।',
   '5×5': '5×5',

@@ -232,6 +232,8 @@ export default {
   'Push, pull and legs each get their own day.': 'Жимы, тяги и ноги — каждому свой день.',
   'Upper / Lower': 'Верх / Низ',
   'Upper body twice, lower body twice.': 'Верх тела дважды, низ дважды.',
+  'PPL + Upper / Lower': 'PPL + Верх / Низ',
+  'Push, pull and legs, then upper and lower body once more.': 'Жимы, тяги и ноги, затем ещё раз верх и низ.',
   'Full Body': 'Всё тело',
   'Three sessions, the whole body each time.': 'Три тренировки, каждый раз всё тело.',
   '5×5': '5×5',
